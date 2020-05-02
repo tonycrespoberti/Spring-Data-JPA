@@ -1,3 +1,6 @@
+/**
+ * Author: Tony Crespo, tonycrespo@outlook.com
+ */
 package com.springjpa.entity;
 
 import java.io.Serializable;
@@ -15,16 +18,24 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+
+
 @Entity
 @Table(name = "USERS")
-public class User implements Serializable{
-
-	private static final long serialVersionUID = 1L;
+public class User implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "USER_ID")
 	private Long idUser;
+	
+	@Column(name = "DNI")
+	private String dni;
 	
 	@Column(name = "FULL_NAME")
 	private String firstAndSecondName;
@@ -32,6 +43,13 @@ public class User implements Serializable{
 	@Column(name = "PASSWORD")
 	private String password;
 	
+	//@JsonIgnore
+	//@JsonIgnore property helps to avoid an infinite recursion spring it is a Jackson issues that it was sorted out with that annotation
+	//It is important if it is marked the http request in controller endpoint won¡t be read correctly and request body in Json format will fail.
+	@JsonManagedReference
+	//Using JsonManagedReference cause the following error:
+	//com.fasterxml.jackson.databind.exc.InvalidDefinitionException: No serializer found for class org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor and no properties discovered to create BeanSerializer (to avoid exception, disable SerializationFeature.FAIL_ON_EMPTY_BEANS)
+	//That's Jackson requires all field and method have to be public.
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "DIRECTION_ID")
 	private Direction direction;
@@ -45,9 +63,10 @@ public class User implements Serializable{
 
 	}
 
-	public User(Long idUser, String firstAndSecondName, String password, Direction direction,
+	public User(Long idUser, String dni, String firstAndSecondName, String password, Direction direction,
 			List<CellPhone> cellPhoneList) {
 		this.idUser = idUser;
+		this.dni = dni;
 		this.firstAndSecondName = firstAndSecondName;
 		this.password = password;
 		this.direction = direction;
@@ -60,6 +79,14 @@ public class User implements Serializable{
 
 	public void setIdUser(Long idUser) {
 		this.idUser = idUser;
+	}
+	
+	public String getDni() {
+		return dni;
+	}
+	
+	public void setDni(String dni) {
+		this.dni = dni;
 	}
 
 	public String getFirstAndSecondName() {
@@ -96,7 +123,7 @@ public class User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [idUser=" + idUser + ", firstAndSecondName=" + firstAndSecondName + ", password=" + password
-				+ ", direction=" + direction + ", cellPhoneList=" + cellPhoneList + "]";
+		return "User [idUser=" + idUser + ", dni=" + dni + ", firstAndSecondName=" + firstAndSecondName + ", password="
+				+ password + ", direction=" + direction.getIdDirection() + ", cellPhoneList=" + cellPhoneList + "]";
 	}
 }

@@ -1,3 +1,6 @@
+/**
+ * Author: Tony Crespo, tonycrespo@outlook.com
+ */
 package com.springjpa.entity;
 
 import java.io.Serializable;
@@ -10,9 +13,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.CascadeType;
+
+import org.hibernate.annotations.Cascade;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+;
 
 @Entity
 @Table(name = "DIRECTIONS")
+//@JsonAutoDetect(fieldVisibility = Visibility.ANY)
+//@JsonSerialize
 public class Direction implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -33,11 +44,14 @@ public class Direction implements Serializable {
 	
 	@Column(name = "ZIPCODE")
 	private String zipCode;
-	
+	 
 	@Column(name = "STATE")
 	private String state;
 
-	@OneToOne(mappedBy = "direction", fetch = FetchType.LAZY, orphanRemoval = true)
+	//@JsonIgnore //for json infinite recursion spring it is a Jackson issues that it was sorted out with that annotation
+	//@Cascade({CascadeType.SAVE_UPDATE}) //To avoid error persistency detach entity using  javax.persistence.CascadeType, we replace it for org.hibernate.annotations.Cascade
+	@JsonBackReference
+	@OneToOne(mappedBy = "direction", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private User user;
 	
 	public Direction() {
@@ -114,6 +128,6 @@ public class Direction implements Serializable {
 	@Override
 	public String toString() {
 		return "Direction [idDirection=" + idDirection + ", street=" + street + ", number=" + number + ", location="
-				+ location + ", zipCode=" + zipCode + ", state=" + state + ", user.id=" + user.getIdUser() + "]";
+				+ location + ", zipCode=" + zipCode + ", state=" + state + "]";
 	}
 }

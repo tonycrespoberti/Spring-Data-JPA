@@ -1,7 +1,5 @@
 package com.springjpa.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 @Entity
 @Table(name = "CELLPHONE")
 //It is assumed each user has at least one cellphone.
-public class CellPhone implements Serializable{
-
-	private static final long serialVersionUID = 1L;
+public class CellPhone {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +27,8 @@ public class CellPhone implements Serializable{
 	@Column(name = "MODEL")
 	private String model;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "USER_ID")
 	private User user;
 

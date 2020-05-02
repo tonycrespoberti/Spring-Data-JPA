@@ -1,3 +1,6 @@
+/**
+ * Author: Tony Crespo, tonycrespo@outlook.com
+ */
 package com.springjpa.repository;
 
 import java.util.List;
@@ -16,7 +19,15 @@ public interface IUser extends JpaRepository<User, Long>{
 	
 	List<User> findAll();
 	
-	@Query(value = "select u from User u where u.firstAndSecondName like %?1%")
+	@Query(value = "SELECT u FROM User u WHERE u.firstAndSecondName LIKE %?1%")
 	List<User> findByFirstnameContaining(String expressionMatch);
+	
+	Optional<User> findByDni(String dni);
+	
+	//Inner Join Native SQL
+	@Query(nativeQuery = true, value = "SELECT * FROM users INNER JOIN directions ON users.direction_id = directions.direction_id")
+	List<User> findByJoinUserDirection();
+	
+	void deleteByDni(String dni);
 	
 }
