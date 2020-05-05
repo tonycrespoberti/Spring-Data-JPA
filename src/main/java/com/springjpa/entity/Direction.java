@@ -15,15 +15,17 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.CascadeType;
 
-import org.hibernate.annotations.Cascade;
+//import org.hibernate.annotations.Cascade;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-;
+
+import lombok.Data;
 
 @Entity
 @Table(name = "DIRECTIONS")
 //@JsonAutoDetect(fieldVisibility = Visibility.ANY)
 //@JsonSerialize
+@Data
 public class Direction implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -53,7 +55,8 @@ public class Direction implements Serializable {
 	@JsonBackReference
 	@OneToOne(mappedBy = "direction", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private User user;
-	
+
+	/*
 	public Direction() {
 		
 	}
@@ -130,4 +133,5 @@ public class Direction implements Serializable {
 		return "Direction [idDirection=" + idDirection + ", street=" + street + ", number=" + number + ", location="
 				+ location + ", zipCode=" + zipCode + ", state=" + state + "]";
 	}
+	*/
 }

@@ -18,13 +18,22 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+//import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter; // All of these classes must be installed. 1. 
 
 
 
 @Entity
 @Table(name = "USERS")
+@Getter // Both of them by Lombok. It is a library which facilitates many tedious tasks and reduces Java source code verbosity.
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -59,6 +68,7 @@ public class User implements Serializable {
 	
 	//**********
 
+/* All of these are provided by Lombok Annotations @Data or @Getters/@Setters, @AllArgsConstructor, @NoArgsConstructor
 	public User() {
 
 	}
@@ -120,7 +130,7 @@ public class User implements Serializable {
 	public void setCellPhoneList(List<CellPhone> cellPhoneList) {
 		this.cellPhoneList = cellPhoneList;
 	}
-
+*/
 	@Override
 	public String toString() {
 		return "User [idUser=" + idUser + ", dni=" + dni + ", firstAndSecondName=" + firstAndSecondName + ", password="
